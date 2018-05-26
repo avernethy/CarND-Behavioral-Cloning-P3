@@ -1,4 +1,4 @@
 *.zip
 *.jpg
 /vern_data
-*.h5
+model.h5
