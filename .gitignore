@@ -2,3 +2,5 @@
 *.jpg
 /vern_data
 model.h5
+/sinusoid
+/swerve
