@@ -5,12 +5,7 @@ import numpy as np
 images = []
 measurements = []
 
-
-
-
-
-
-if 0:
+if 1:
     swerve_lines = []
     with open("swerve/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
@@ -42,7 +37,7 @@ if 1:
         measurement = float(line[3])
         measurements.append(measurement)
 
-if 1:
+if 0:
     rec_left_lines=[] #change here
     with open("recover_left/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
@@ -58,7 +53,7 @@ if 1:
         measurement = float(line[3])
         measurements.append(measurement)
 
-if 1:
+if 0:
     rec_right_lines=[]
     with open("recover_right/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
@@ -74,7 +69,7 @@ if 1:
         measurement = float(line[3])
         measurements.append(measurement)
 
-if 1:
+if 0:
     rec_right2_lines=[] #change here
     with open("recover_right2/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
@@ -85,6 +80,22 @@ if 1:
         source_path = line[0]
         filename = source_path.split("\\")[-1]
         current_path = 'recover_right2/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
+if 0:
+    rec_right3_lines=[] #change here
+    with open("recover_right3/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            rec_right3_lines.append(line) #change here
+
+    for line in rec_right3_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'recover_right3/IMG/' + filename #change here
         image = cv2.imread(current_path)
         images.append(image)
         measurement = float(line[3])
@@ -117,6 +128,6 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
-model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
+model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 1)
 
 model.save('model.h5')
