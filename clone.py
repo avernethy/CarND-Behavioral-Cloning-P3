@@ -10,7 +10,7 @@ measurements = []
 
 
 
-if 1:
+if 0:
     swerve_lines = []
     with open("swerve/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
@@ -26,7 +26,7 @@ if 1:
         measurement = float(line[3])
         measurements.append(measurement)
 
-if 0:
+if 1:
     sinusoid_lines=[]
     with open("sinusoid/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
@@ -42,7 +42,7 @@ if 0:
         measurement = float(line[3])
         measurements.append(measurement)
 
-if 0:
+if 1:
     rec_left_lines=[] #change here
     with open("recover_left/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
@@ -58,7 +58,7 @@ if 0:
         measurement = float(line[3])
         measurements.append(measurement)
 
-if 0:
+if 1:
     rec_right_lines=[]
     with open("recover_right/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
