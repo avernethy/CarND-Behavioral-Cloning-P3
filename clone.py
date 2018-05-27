@@ -74,6 +74,23 @@ if 1:
         measurement = float(line[3])
         measurements.append(measurement)
 
+if 1:
+    rec_right2_lines=[] #change here
+    with open("recover_right2/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            rec_right2_lines.append(line) #change here
+
+    for line in rec_right2_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'recover_right2/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
+
 X_train = np.array(images)
 y_train = np.array(measurements)
 input_shape = X_train.shape
