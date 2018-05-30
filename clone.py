@@ -101,6 +101,86 @@ if 0:
         measurement = float(line[3])
         measurements.append(measurement)
 
+if 0:
+    smooth_lines=[] #change here
+    with open("smooth/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            smooth_lines.append(line) #change here
+
+    for line in smooth_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'smooth/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
+if 0:
+    smoothreverse_lines=[] #change here
+    with open("smoothreverse/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            smoothreverse_lines.append(line) #change here
+
+    for line in smoothreverse_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'smoothreverse/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
+if 1:
+    sinusoidmtn_lines=[] #change here
+    with open("sinusoidmtn/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            sinusoidmtn_lines.append(line) #change here
+
+    for line in sinusoidmtn_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'sinusoidmtn/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
+if 0:
+    smoothmtn_lines=[] #change here
+    with open("smoothmtn/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            smoothmtn_lines.append(line) #change here
+
+    for line in smoothmtn_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'smoothmtn/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
+if 1:
+    slalom_lines=[] #change here
+    with open("slalom/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            slalom_lines.append(line) #change here
+
+    for line in slalom_lines:# change here
+        source_path = line[0]
+        filename = source_path.split("\\")[-1]
+        current_path = 'slalom/IMG/' + filename #change here
+        image = cv2.imread(current_path)
+        images.append(image)
+        measurement = float(line[3])
+        measurements.append(measurement)
+
 
 X_train = np.array(images)
 y_train = np.array(measurements)
@@ -128,6 +208,6 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
-model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 1)
+model.fit(X_train, y_train, validation_split = 0.3, shuffle = True, nb_epoch = 1)
 
 model.save('model.h5')
