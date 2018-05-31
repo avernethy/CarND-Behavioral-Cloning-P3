@@ -15,15 +15,27 @@ def generator(samples, batch_size = 32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                source_path = batch_sample[0]
-                path_parts = source_path.split("\\")
-                name = source_path.split("\\")[-1]
-                image_path = path_parts[-3]+'/'+path_parts[-2]+'/'+name
-                center_image = cv2.imread(image_path)
+                center_path = batch_sample[0]
+                left_path = batch_sample[1]
+                right_path = batch_sample[2]
+                path_parts = center_path.split("\\")
+                center_name = center_path.split("\\")[-1]
+                left_name = left_path.split("\\")[-1]
+                right_name = right_path.split("\\")[-1]
+                image_path_center = path_parts[-3]+'/'+path_parts[-2]+'/'+center_name
+                image_path_left = path_parts[-3]+'/'+path_parts[-2]+'/'+left_name
+                image_path_right = path_parts[-3]+'/'+path_parts[-2]+'/'+right_name
+                center_image = cv2.imread(image_path_center)
+                left_image = cv2.imread(image_path_left)
+                right_image = cv2.imread(image_path_right)
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
+                #images.append(left_image)
+                #images.append(right_image)
                 #images.append(cv2.flip(center_image,1))
                 angles.append(center_angle)
+                #angles.append(center_angle+0.05)
+                #angles.append(center_angle-0.05)
                 #angles.append(center_angle * -1.0)
                 X_train = np.array(images)
                 y_train = np.array(angles)
@@ -44,7 +56,7 @@ if 0: #Swerving data
         for line in reader:
             lines.append(line)
 
-if 0: #higher frequency, low amplitude sinusoid
+if 1: #higher frequency, low amplitude sinusoid
     with open("sinusoid/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
@@ -62,25 +74,25 @@ if 1: #recover from the right
         for line in reader:
             lines.append(line)
 
-if 1: #recover from the right #2
+if 0: #recover from the right #2
     with open("recover_right2/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 1: #recover from the right #3
+if 0: #recover from the right #3
     with open("recover_right3/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 1: #smooth driving
+if 0: #smooth driving
     with open("smooth/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 1:  #smooth in reverse
+if 0:  #smooth in reverse
     with open("smoothreverse/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
@@ -104,8 +116,21 @@ if 0: #more zig zag driving
         for line in reader:
             lines.append(line)
 
+if 0:#edge driving
+    with open("right_edge_turn/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
+if 0:#swerve driving
+    with open("swerve3laps/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
 #using the big list of all images sampled, create a training and validation set
 from sklearn.model_selection import train_test_split
+shuffle(lines)
 train_samples, validation_samples = train_test_split(lines, test_size = 0.2)
 train_generator = generator(train_samples, batch_size = 32)
 validation_generator = generator(validation_samples, batch_size = 32)
@@ -119,11 +144,16 @@ from keras.layers.convolutional import Cropping2D
 #NVIDIA model
 model = Sequential()
 model.add(Lambda(lambda x: x / 255 - 0.5, input_shape=(160,320,3), output_shape=(160,320,3)))
-model.add(Cropping2D(cropping=((60,30),(0,0))))#(70,20)
+model.add(Cropping2D(cropping=((70,20),(20,20))))#(70,20)
 model.add(Convolution2D(24,5,5,subsample=(2,2), border_mode='valid', activation = 'relu'))
-model.add(Convolution2D(6,5,5, subsample=(2,2), border_mode='valid', activation = 'relu'))
-model.add(Convolution2D(64,3,3,activation = "relu"))
-model.add(Convolution2D(64,3,3,activation = "relu"))
+#model.add(Dropout(0.5, noise_shape=None, seed=None))
+model.add(Convolution2D(36,5,5, subsample=(2,2), activation = 'relu'))
+#model.add(Dropout(0.5, noise_shape=None, seed=None))
+model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "relu"))
+#model.add(Dropout(0.5, noise_shape=None, seed=None))
+model.add(Convolution2D(64,3,3, activation = "relu"))
+model.add(Convolution2D(64,3,3, activation = "relu"))
+#model.add(Dropout(0.5, noise_shape=None, seed=None))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))
@@ -132,6 +162,15 @@ model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
 
-model.fit_generator(train_generator, samples_per_epoch=len(lines),validation_data = validation_generator, nb_val_samples = len(validation_samples), nb_epoch = 1)
+history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),validation_data = validation_generator, nb_val_samples = len(validation_samples), nb_epoch = 1, verbose = 1)
 
+print(history_object.history.keys())
+import matplotlib.pyplot as plt
+plt.plot(history_object.history['loss'])
+plt.plot(history_object.history['val_loss'])
+plt.title('model mean squared error loss')
+plt.ylabel('mean squared error loss')
+plt.xlabel('epoch')
+plt.legend(['training set', 'validation set'], loc='upper right')
+plt.show()
 model.save('model.h5')

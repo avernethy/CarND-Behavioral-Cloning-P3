@@ -14,3 +14,5 @@ model.h5
 /smooth
 /smoothmtn
 /smoothreverse
+/right_edge_turn
+swerve3laps/
