@@ -15,4 +15,10 @@ model.h5
 /smoothmtn
 /smoothreverse
 /right_edge_turn
-swerve3laps/
+/swerve3laps
+/leftavoid
+/recoveryLeft2
+/recoveryRight4
+/rightTurn
+/smoothLaps
+/leftAvoid

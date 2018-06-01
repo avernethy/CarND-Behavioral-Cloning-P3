@@ -6,7 +6,7 @@ import sklearn
 from random import shuffle
 
 #modified version of the example generator here
-def generator(samples, batch_size = 32):
+def generator(samples, batch_size = 256):
     num_samples = len(samples)
     while 1:
         shuffle(samples)
@@ -30,12 +30,12 @@ def generator(samples, batch_size = 32):
                 right_image = cv2.imread(image_path_right)
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
-                #images.append(left_image)
-                #images.append(right_image)
+                images.append(left_image)
+                images.append(right_image)
                 #images.append(cv2.flip(center_image,1))
                 angles.append(center_angle)
-                #angles.append(center_angle+0.05)
-                #angles.append(center_angle-0.05)
+                angles.append(center_angle+0.45)
+                angles.append(center_angle-0.45)
                 #angles.append(center_angle * -1.0)
                 X_train = np.array(images)
                 y_train = np.array(angles)
@@ -45,12 +45,23 @@ def generator(samples, batch_size = 32):
 lines = []
 
 #populate the list of images.  turn on/off the data sets with 1 or 0
+if 1:
+    with open("recoveryRight4/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
+if 1: #more recovery driving
+    with open("recoveryLeft2/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader: 
+            lines.append(line)
 if 0: #Udacity data
     with open("data/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
-if 0: #Swerving data
+if 1: #Swerving data
     with open("swerve/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
@@ -62,7 +73,7 @@ if 1: #higher frequency, low amplitude sinusoid
         for line in reader:
             lines.append(line)
 
-if 0: #recover from the left
+if 1: #recover from the left
     with open("recover_left/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
@@ -74,19 +85,19 @@ if 1: #recover from the right
         for line in reader:
             lines.append(line)
 
-if 0: #recover from the right #2
+if 1: #recover from the right #2
     with open("recover_right2/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 0: #recover from the right #3
+if 1: #recover from the right #3
     with open("recover_right3/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 0: #smooth driving
+if 1: #smooth driving
     with open("smooth/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
@@ -110,26 +121,45 @@ if 0: #smooth moumntain driving
         for line in reader:
             lines.append(line)
 
-if 0: #more zig zag driving
+if 1: #more zig zag driving
     with open("slalom/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 0:#edge driving
+if 0:#edge driving#not good pulls the model to the edge
     with open("right_edge_turn/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 0:#swerve driving
+if 1:#swerve driving
     with open("swerve3laps/driving_log.csv") as csvfile: #change here
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+if 0:#evevn more smooth driving
+    with open("smoothLaps/driving_log.csv") as csvfile: 
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+if 1:#right turn recovery
+    with open("rightTurn/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+if 0: #left avoid
+    with open("leftAvoid/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
 #using the big list of all images sampled, create a training and validation set
 from sklearn.model_selection import train_test_split
+shuffle(lines)
+shuffle(lines)
+shuffle(lines)
+shuffle(lines)
 shuffle(lines)
 train_samples, validation_samples = train_test_split(lines, test_size = 0.2)
 train_generator = generator(train_samples, batch_size = 32)
@@ -162,15 +192,15 @@ model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
 
-history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),validation_data = validation_generator, nb_val_samples = len(validation_samples), nb_epoch = 1, verbose = 1)
+history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*4,validation_data = validation_generator, nb_val_samples = len(validation_samples)*3, nb_epoch = 3, verbose = 1)
 
-print(history_object.history.keys())
-import matplotlib.pyplot as plt
-plt.plot(history_object.history['loss'])
-plt.plot(history_object.history['val_loss'])
-plt.title('model mean squared error loss')
-plt.ylabel('mean squared error loss')
-plt.xlabel('epoch')
-plt.legend(['training set', 'validation set'], loc='upper right')
-plt.show()
+#print(history_object.history.keys())
+#import matplotlib.pyplot as plt
+#plt.plot(history_object.history['loss'])
+#plt.plot(history_object.history['val_loss'])
+#plt.title('model mean squared error loss')
+#plt.ylabel('mean squared error loss')
+#plt.xlabel('epoch')
+#plt.legend(['training set', 'validation set'], loc='upper right')
+#plt.show()
 model.save('model.h5')
