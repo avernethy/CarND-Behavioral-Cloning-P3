@@ -61,13 +61,13 @@ if 0: #Udacity data
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
-if 1: #Swerving data
+if 0: #Swerving data
     with open("swerve/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 1: #higher frequency, low amplitude sinusoid
+if 0: #higher frequency, low amplitude sinusoid
     with open("sinusoid/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
@@ -103,7 +103,7 @@ if 1: #smooth driving
         for line in reader:
             lines.append(line)
 
-if 0:  #smooth in reverse
+if 1:  #smooth in reverse
     with open("smoothreverse/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
@@ -115,13 +115,13 @@ if 0: #sinusoid mountain driving
         for line in reader:
             lines.append(line)
 
-if 0: #smooth moumntain driving
+if 1: #smooth moumntain driving
     with open("smoothmtn/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
 
-if 1: #more zig zag driving
+if 0: #more zig zag driving
     with open("slalom/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
@@ -133,12 +133,12 @@ if 0:#edge driving#not good pulls the model to the edge
         for line in reader:
             lines.append(line)
 
-if 1:#swerve driving
+if 0:#swerve driving
     with open("swerve3laps/driving_log.csv") as csvfile: #change here
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
-if 0:#evevn more smooth driving
+if 1:#evevn more smooth driving
     with open("smoothLaps/driving_log.csv") as csvfile: 
         reader = csv.reader(csvfile)
         for line in reader:
@@ -148,7 +148,7 @@ if 1:#right turn recovery
         reader = csv.reader(csvfile)
         for line in reader:
             lines.append(line)
-if 0: #left avoid
+if 1: #left avoid
     with open("leftAvoid/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
