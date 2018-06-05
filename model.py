@@ -157,10 +157,7 @@ if 1: #left avoid
 #using the big list of all images sampled, create a training and validation set
 from sklearn.model_selection import train_test_split
 shuffle(lines)
-shuffle(lines)
-shuffle(lines)
-shuffle(lines)
-shuffle(lines)
+
 train_samples, validation_samples = train_test_split(lines, test_size = 0.2)
 train_generator = generator(train_samples, batch_size = 32)
 validation_generator = generator(validation_samples, batch_size = 32)
@@ -192,7 +189,7 @@ model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
 
-history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*4,validation_data = validation_generator, nb_val_samples = len(validation_samples)*3, nb_epoch = 3, verbose = 1)
+history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*3,validation_data = validation_generator, nb_val_samples = len(validation_samples)*3, nb_epoch = 3, verbose = 1)
 
 #print(history_object.history.keys())
 #import matplotlib.pyplot as plt
