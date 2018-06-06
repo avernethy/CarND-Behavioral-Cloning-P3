@@ -34,8 +34,17 @@ def generator(samples, batch_size = 256):
                 images.append(right_image)
                 #images.append(cv2.flip(center_image,1))
                 angles.append(center_angle)
-                angles.append(center_angle+0.45)
-                angles.append(center_angle-0.45)
+                right_aug = 0
+                left_aug = 0
+                if center_angle > 0.06:
+                    left_aug = 0.12
+                    right_aug = 0
+                else:
+                    left_aug = 0
+                    right_aug = 0.12
+              
+                angles.append(center_angle+left_aug)
+                angles.append(center_angle-right_aug)
                 #angles.append(center_angle * -1.0)
                 X_train = np.array(images)
                 y_train = np.array(angles)
@@ -196,6 +205,7 @@ from keras.layers.convolutional import Cropping2D
 model = Sequential()
 model.add(Lambda(lambda x: x / 255 - 0.5, input_shape=(160,320,3), output_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((70,20),(20,20))))#(70,20)
+#model.add(Lambda(lambda x: x / 255 - 0.5)
 model.add(Convolution2D(24,5,5,subsample=(2,2), border_mode='valid', activation = 'relu'))
 #model.add(Dropout(0.5, noise_shape=None, seed=None))
 model.add(Convolution2D(36,5,5, subsample=(2,2), activation = 'relu'))
@@ -213,7 +223,7 @@ model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
 
-history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*3,validation_data = validation_generator, nb_val_samples = len(validation_samples)*3, nb_epoch = 3, verbose = 1)
+history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*3,validation_data = validation_generator, nb_val_samples = len(validation_samples)*3, nb_epoch = 1, verbose = 1)
 
 #print(history_object.history.keys())
 #import matplotlib.pyplot as plt
