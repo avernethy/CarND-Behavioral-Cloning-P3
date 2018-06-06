@@ -46,6 +46,30 @@ lines = []
 
 #populate the list of images.  turn on/off the data sets with 1 or 0
 if 1:
+    with open("ps3_3laps_smooth/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
+if 1:
+    with open("ps3_3laps_smooth_rev/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
+if 1:
+    with open("ps3_mtn_smooth_3laps/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
+if 1:
+    with open("ps3_sooth_mtn_rev/driving_log.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            lines.append(line)
+
+if 1:
     with open("recoveryRight4/driving_log.csv") as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
